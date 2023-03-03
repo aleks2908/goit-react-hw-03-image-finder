@@ -1,24 +1,24 @@
-import css from './Searchbar.module.css';
-import { ImSearch } from 'react-icons/im';
 import React, { Component } from 'react';
-import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
-// export const Searchbar = ({ searchValue }) => {
+import { ImSearch } from 'react-icons/im';
+import { toast } from 'react-toastify';
+import css from './Searchbar.module.css';
+
 export class Searchbar extends Component {
-  state = { searchValue: '' };
+  state = {
+    searchValue: '',
+  };
 
   handleChange = event => {
-    // console.log(event.currentTarget.value);
     this.setState({
-      searchValue: event.currentTarget.value.toLowerCase(),
+      searchValue: event.currentTarget.value,
     });
   };
 
   handleSubmit = event => {
-    // console.log(event);
     event.preventDefault();
     if (this.state.searchValue.trim() === '') {
-      // alert('123');
       toast.warn('Please enter something', {
         position: 'top-right',
         autoClose: 3000,
@@ -32,11 +32,9 @@ export class Searchbar extends Component {
 
       return;
     }
-    this.props.onSubmit(this.state.searchValue.trim());
+    this.props.onSubmit(this.state.searchValue.toLowerCase().trim());
     this.setState({ searchValue: '' });
   };
-
-  // notify = () => toast('Wow so easy!');
 
   render() {
     return (
@@ -62,3 +60,8 @@ export class Searchbar extends Component {
     );
   }
 }
+
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired
+};

@@ -1,58 +1,40 @@
-import css from './ImageGalleryItem.module.css';
-import { Modal } from 'components/Modal/Modal';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import { Modal } from 'components/Modal/Modal';
+import css from './ImageGalleryItem.module.css';
 
 export class ImageGalleryItem extends Component {
   state = {
     showModal: false,
   };
 
-  // onImageClick = value => {
-  //     // console.log('показать модалку');
-  //     this.setState({ showModal: true });
-  //     //   console.log(value);
-  //     //   console.log(this.props.item.largeImageURL);
-  //     //   console.log(this.props.item.tags);
-  //     // this.setState({ isLoading: true });
-  //     // console.log('btnLoadMoreClick');
-  //     // this.setState(prevState => ({
-  //     //   page: prevState.page + 1,
-  //     // }));
-  // };
-
-  // export const ImageGalleryItem = ({
-  //   onImageClick,
-  //   item: { webformatURL, tags, largeImageURL },
-  // }) => {
-  //   // console.log(id);
-
   toggleModal = () => {
-    // console.log(this.state.showModal);
     this.setState(state => ({
       showModal: !state.showModal,
     }));
-    // console.log(this.state.showModal);
   };
 
-    
   render() {
+    const { largeImageURL, tags, webformatURL } = this.props.item;
     return (
       <>
         {this.state.showModal && (
-          <Modal
-            onClose={this.toggleModal}
-            image={this.props.item.largeImageURL}
-            tag={this.props.item.tags}
-          />
+          <Modal onClose={this.toggleModal} image={largeImageURL} tag={tags} />
         )}
+
         <li onClick={this.toggleModal} className={css.ImageGalleryItem}>
           <img
             className={css.ImageGalleryItemImage}
-            src={this.props.item.webformatURL}
-            alt={this.props.item.tags}
+            src={webformatURL}
+            alt={tags}
           />
         </li>
       </>
     );
   }
 }
+
+ImageGalleryItem.propTypes = {
+  item: PropTypes.object.isRequired,
+};

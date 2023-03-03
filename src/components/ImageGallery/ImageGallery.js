@@ -1,10 +1,12 @@
-import css from './ImageGallery.module.css';
 import React, { Component } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Vortex } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+
+import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Button } from '../Button/Button';
+import css from './ImageGallery.module.css';
 
 export class ImageGallery extends Component {
   state = {
@@ -18,7 +20,6 @@ export class ImageGallery extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchValue !== this.props.searchValue) {
-      console.log('зміна пошуку на ', this.props.searchValue);
       this.setState({ page: 1 });
       if (this.state.page !== 1) {
         return;
@@ -29,18 +30,10 @@ export class ImageGallery extends Component {
       prevProps.searchValue !== this.props.searchValue ||
       prevState.page !== this.state.page
     ) {
-      //   console.log('prevProps.page', prevProps.page);
-      //   console.log('this.props.page', this.props.page);
-
-      console.log('prevState.page', prevState.page);
-      console.log('this.state.page', this.state.page);
-
-      console.log('**отрисовка**');
-
       this.setState({ isLoading: true, isLoadMoreBtnHidden: false });
+
       const BASE_URL = 'https://pixabay.com/api/';
       const MY_KEY = '32804952-bc7fa4c68d10a619b16622bc9';
-
       try {
         const resp = await axios.get(
           `${BASE_URL}?q=${this.props.searchValue}&page=${this.state.page}&key=${MY_KEY}&image_type=photo&orientation=horizontal&per_page=12`
@@ -77,7 +70,6 @@ export class ImageGallery extends Component {
         }
 
         if (this.state.page * 12 >= totalHits) {
-          //   alert('ПЕРЕБОР!!!');
           this.setState({ isLoadMoreBtnHidden: true });
           toast.success("You've reached the end of search results.", {
             position: 'top-right',
@@ -98,21 +90,17 @@ export class ImageGallery extends Component {
 
   btnLoadMoreClick = () => {
     this.setState({ isLoading: true });
-    // console.log('btnLoadMoreClick');
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   };
 
   render() {
-    const items = this.state.items;
-    // console.log('items: ', items);
-    // console.log(this.state.items.length);
+    const { items, isLoading, isLoadMoreBtnHidden } = this.state;
 
     return (
       <>
-        {/* {this.state.showModal && <Modal />} */}
-        {this.state.isLoading && (
+        {isLoading && (
           <div className={css.vortexWrapper}>
             <Vortex
               visible={true}
@@ -125,26 +113,17 @@ export class ImageGallery extends Component {
             />
           </div>
         )}
+
         <ul className={css.ImageGallery}>
           {items.map(item => (
-            <ImageGalleryItem
-              key={item.id}
-              //   onImageClick={this.onImageClick}
-              item={item}
-            />
+            <ImageGalleryItem key={item.id} item={item} />
           ))}
         </ul>
 
-        {this.state.items.length !== 0 && (
-          <div
-            hidden={this.state.isLoadMoreBtnHidden}
-            className={css.vortexWrapper}
-          >
-            {!this.state.isLoading ? (
-              <Button
-                // disabled={this.state.isLoadMoreBtnDisable}
-                onClick={this.btnLoadMoreClick}
-              />
+        {items.length !== 0 && (
+          <div hidden={isLoadMoreBtnHidden} className={css.vortexWrapper}>
+            {!isLoading ? (
+              <Button onClick={this.btnLoadMoreClick} />
             ) : (
               <Vortex
                 visible={true}
@@ -162,3 +141,8 @@ export class ImageGallery extends Component {
     );
   }
 }
+
+
+ImageGallery.propTypes = {
+  searchValue: PropTypes.string.isRequired
+};
