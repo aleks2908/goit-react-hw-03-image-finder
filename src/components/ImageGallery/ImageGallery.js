@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Vortex } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Button } from '../Button/Button';
 import css from './ImageGallery.module.css';
+import { Loader } from 'components/Loader/Loader';
 
 export class ImageGallery extends Component {
   state = {
@@ -102,15 +102,7 @@ export class ImageGallery extends Component {
       <>
         {isLoading && (
           <div className={css.vortexWrapper}>
-            <Vortex
-              visible={true}
-              height="80"
-              width="80"
-              ariaLabel="vortex-loading"
-              wrapperStyle={{}}
-              wrapperClass="vortex-wrapper"
-              colors={['red', 'green', 'blue', 'yellow', 'orange', 'purple']}
-            />
+            <Loader />
           </div>
         )}
 
@@ -125,15 +117,7 @@ export class ImageGallery extends Component {
             {!isLoading ? (
               <Button onClick={this.btnLoadMoreClick} />
             ) : (
-              <Vortex
-                visible={true}
-                height="80"
-                width="80"
-                ariaLabel="vortex-loading"
-                wrapperStyle={{}}
-                wrapperClass="vortex-wrapper"
-                colors={['red', 'green', 'blue', 'yellow', 'orange', 'purple']}
-              />
+              <Loader />
             )}
           </div>
         )}
@@ -142,7 +126,6 @@ export class ImageGallery extends Component {
   }
 }
 
-
 ImageGallery.propTypes = {
-  searchValue: PropTypes.string.isRequired
+  searchValue: PropTypes.string.isRequired,
 };
