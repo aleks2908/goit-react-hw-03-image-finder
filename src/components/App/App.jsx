@@ -20,10 +20,6 @@ export class App extends Component {
     isLoadMoreBtnHidden: false,
   };
 
-  handleFormSubmit = searchValue => {
-    this.setState({ searchValue, page: 1 });
-  };
-
   async componentDidUpdate(_, prevState) {
     if (
       prevState.searchValue !== this.state.searchValue ||
@@ -86,6 +82,10 @@ export class App extends Component {
       }
     }
   }
+
+  handleFormSubmit = searchValue => {
+    this.setState({ searchValue, page: 1 });
+  };
 
   btnLoadMoreClick = () => {
     this.setState({ isLoading: true });
