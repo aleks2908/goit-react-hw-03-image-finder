@@ -40,3 +40,4 @@ Modal.propTypes = {
   image: PropTypes.string.isRequired,
   tag: PropTypes.string.isRequired,
 };
+
